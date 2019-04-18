@@ -1,0 +1,15 @@
+<div class="row">
+  <h1>Fotos de {{ product?.name }}</h1>
+  <div class="col-md-12">
+    <product-photo-upload (onSuccess)="onInsertSucccess($event)"></product-photo-upload>
+  </div>
+
+  <div class="col-md-4" *ngFor="let photo of photos">
+    <a data-fancybox="gallery" [href]="photo.photo_url">
+        <img [id]="'photo-'+photo.id" [src]="photo.photo_url" [alt]="product?.name" class="img-fluid">
+    </a>
+  </div>
+</div>
+
+<product-photo-edit-modal (onSuccess)="onEditSuccess($event)" [photoId]="photoIdToEdit"></product-photo-edit-modal>
+<product-photo-delete-modal (onSuccess)="onDeleteSuccess($event)" [photoId]="photoIdToRemove"></product-photo-delete-modal>

@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgxPaginationModule } from 'ngx-pagination'
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt'
+import {Select2Module} from 'ng2-select2'
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/pages/login/login.component';
@@ -30,6 +31,22 @@ import { UserListComponent } from './components/pages/user/user-list/user-list.c
 import { UserNewModalComponent } from './components/pages/user/user-new-modal/user-new-modal.component';
 import { UserEditModalComponent } from './components/pages/user/user-edit-modal/user-edit-modal.component';
 import { UserDeleteModalComponent } from './components/pages/user/user-delete-modal/user-delete-modal.component';
+import { SortColumnComponent } from './components/common/sort-column/sort-column.component';
+import { CategorySearchFormComponent } from './components/pages/category/category-search-form/category-search-form.component';
+import { CategoryFormComponent } from './components/pages/category/category-form/category-form.component';
+import { FieldErrorComponent } from './components/bootstrap/field-error/field-error.component';
+import { IsInvalidDirective, IsInvalidConrolDirective } from './directives/is-invalid.directive';
+import { ListErrorComponent } from './components/bootstrap/list-error/list-error.component';
+import { CardErrorComponent } from './components/bootstrap/card-error/card-error.component';
+import { ProductFormComponent } from './components/pages/product/product-form/product-form.component';
+import { ProductInputListComponent } from './components/pages/product-input/product-input-list/product-input-list.component';
+import { ProductInputNewModalComponent } from './components/pages/product-input/product-input-new-modal/product-input-new-modal.component';
+import { ProductInputFormComponent } from './components/pages/product-input/product-input-form/product-input-form.component';
+import { ProductInputSearchFormComponent } from './components/pages/product-input/product-input-search-form/product-input-search-form.component';
+import { ProductPhotoManagerComponent } from './components/pages/product-photo-manager/product-photo-manager.component';
+import { ProductPhotoUploadComponent } from './components/pages/product-photo-manager/product-photo-upload/product-photo-upload.component';
+import { ProductPhotoEditModalComponent } from './components/pages/product-photo-manager/product-photo-edit-modal/product-photo-edit-modal.component';
+import { ProductPhotoDeleteModalComponent } from './components/pages/product-photo-manager/product-photo-delete-modal/product-photo-delete-modal.component';
 
 function jwtFactory(authService: AuthService) {
   return {
@@ -63,14 +80,33 @@ function jwtFactory(authService: AuthService) {
     UserListComponent,
     UserNewModalComponent,
     UserEditModalComponent,
-    UserDeleteModalComponent
+    UserDeleteModalComponent,
+    SortColumnComponent,
+    CategorySearchFormComponent,
+    CategoryFormComponent,
+    FieldErrorComponent,
+    IsInvalidDirective,
+    IsInvalidConrolDirective,
+    ListErrorComponent,
+    CardErrorComponent,
+    ProductFormComponent,
+    ProductInputListComponent,
+    ProductInputNewModalComponent,
+    ProductInputFormComponent,
+    ProductInputSearchFormComponent,
+    ProductPhotoManagerComponent,
+    ProductPhotoUploadComponent,
+    ProductPhotoEditModalComponent,
+    ProductPhotoDeleteModalComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     NgxPaginationModule,
+    Select2Module,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

@@ -23,6 +23,9 @@ export class CategoryListComponent implements OnInit {
     itemsPerPage: 15
   }
 
+  sortColumn = {column: '', sort: ''}
+  searchText: string
+
   @ViewChild(CategoryNewModalComponent)
   categoryNewModal: CategoryNewModalComponent
 
@@ -46,18 +49,31 @@ export class CategoryListComponent implements OnInit {
     this.getCategories()
   }
 
+  pageChanged(page: number) {
+    this.pagination.page = page
+    this.getCategories()
+  }
+
+  sort(sortColumn) {
+    this.getCategories()
+  }
+
+  search(search) {
+    this.searchText = search
+    this.getCategories()
+  }
+
   getCategories() {
-    this.categoryHttpService.list({page: this.pagination.page})
+    this.categoryHttpService.list({
+      page: this.pagination.page,
+      sort: this.sortColumn.column === '' ? null : this.sortColumn,
+      search: this.searchText
+    })
       .subscribe(res => {
         this.categories = res.data
         this.pagination.totalItems = res.meta.total
         this.pagination.itemsPerPage = res.meta.per_page
       })
-  }
-
-  pageChanged(page: number) {
-    this.pagination.page = page
-    this.getCategories()
   }
 
 }

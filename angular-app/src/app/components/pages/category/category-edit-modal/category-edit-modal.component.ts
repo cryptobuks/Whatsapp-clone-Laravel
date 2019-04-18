@@ -3,6 +3,8 @@ import { ModalComponent } from 'src/app/components/bootstrap/modal/modal.compone
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { Category } from 'src/app/models';
 import { CategoryHttpService } from 'src/app/services/http/category-http.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import fieldsOptions from '../category-form/category-fields-options'
 
 @Component({
   selector: 'app-category-edit-modal',
@@ -11,11 +13,8 @@ import { CategoryHttpService } from 'src/app/services/http/category-http.service
 })
 export class CategoryEditModalComponent implements OnInit {
 
-  category: Category = {
-    name: '',
-    active: true
-  }
-  
+  form: FormGroup
+  errors = {}
   _categoryId: number
 
   @ViewChild(ModalComponent)  modal: ModalComponent
@@ -23,7 +22,12 @@ export class CategoryEditModalComponent implements OnInit {
   @Output() onSuccess:EventEmitter<any> = new EventEmitter<any>()
   @Output() onError:EventEmitter<HttpErrorResponse> = new EventEmitter<HttpErrorResponse>()
 
-  constructor(private categoryHttp: CategoryHttpService) { }
+  constructor(private categoryHttp: CategoryHttpService, private formBuilder: FormBuilder) { 
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.maxLength(fieldsOptions.name.validationMessage.maxlength)]],
+      active: true
+    })
+  }
 
   ngOnInit() {
   }
@@ -35,7 +39,7 @@ export class CategoryEditModalComponent implements OnInit {
       this.categoryHttp
       .get(this._categoryId)
       .subscribe(
-        category => this.category = category, 
+        category => this.form.patchValue(category), 
         responseError => {
           if (responseError.status == 401) {
             this.modal.hide()
@@ -54,11 +58,20 @@ export class CategoryEditModalComponent implements OnInit {
 
   submit() {
     this.categoryHttp
-    .update(this._categoryId, this.category)
+    .update(this._categoryId, this.form.value)
     .subscribe(category => {
       this.onSuccess.emit(category)
       this.modal.hide()
-    }, error => this.onError.emit(error))
+    }, responseError => {
+      if (responseError.status === 422) {
+        this.errors = responseError.error.errors
+      }
+      this.onError.emit(responseError)
+    })
+  }
+
+  showErrors(): boolean {
+    return Object.keys(this.errors).length != 0
   }
 
 }
